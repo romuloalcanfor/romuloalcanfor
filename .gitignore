@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+preview.html
+# Fotos originais e arquivos do Vision: ficam só no computador.
+assets/avatar.jpg
+assets/rosto-original.jpg
+assets/rosto-mask-full.png
+assets/jaw.json
