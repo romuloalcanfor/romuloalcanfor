@@ -117,8 +117,8 @@ def card():
         f'<image x="{CX}" y="{CY + 58}" width="190" height="46" href="data:image/png;base64,{logo}"/></g>',
         f'<g class="in" style="animation-delay:.65s">'
         f'<text x="{CX}" y="{CY + 140}" class="host"><tspan class="red">romulo</tspan>'
-        f'<tspan class="dim">@</tspan><tspan class="red">glousoft</tspan></text>'
-        f'<text x="{CX}" y="{CY + 158}" class="dim">{"-" * 15}</text></g>',
+        f'<tspan class="dim">@</tspan><tspan class="red">glousoft.com</tspan></text>'
+        f'<text x="{CX}" y="{CY + 158}" class="dim">{"-" * 19}</text></g>',
     ]
     y = CY + 184
     for n, (key, value) in enumerate(ROWS):

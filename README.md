@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="./contrib-heatmap.svg" width="860" alt="Contribution heatmap for the last 12 months" />
+  <img src="./contrib.svg" width="860" alt="Contributions per month over the last 12 months, with streaks and best day" />
 </p>
 
 <p align="center">

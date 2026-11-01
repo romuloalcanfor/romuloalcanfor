@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  heatmap:
+  contributions:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,8 +17,12 @@ jobs:
         with:
           python-version: "3.12"
       - run: python scripts/fetch_contributions.py
-      - run: python scripts/render_heatmap_svg.py
+      - run: python scripts/render_contrib_svg.py
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: refresh contribution graph [skip ci]"
-          file_pattern: "data/contributions.json contrib-heatmap.svg"
+          file_pattern: "data/contributions.json contrib.svg"
+          # Commit no nome do bot: assim não conta como contribuição sua no gráfico.
+          commit_user_name: github-actions[bot]
+          commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          commit_author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
