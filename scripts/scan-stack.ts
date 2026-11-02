@@ -46,8 +46,6 @@ const DEPS: Record<string, string> = {
   "drizzle-orm": "Drizzle",
   stripe: "Stripe",
   resend: "Resend",
-  openai: "OpenAI API",
-  "@anthropic-ai/sdk": "Claude API",
   recharts: "Recharts",
   docx: "docx",
 };
