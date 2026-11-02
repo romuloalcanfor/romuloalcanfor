@@ -1,21 +1,18 @@
 // Gera o hero.svg: retrato ASCII à esquerda e cartão estilo neofetch à direita.
-// O retrato vem de data/portrait.txt e das duas imagens feitas pelo
-// make_ascii.py; a logo é assets/glousoft-logo.png. Tudo vai embutido em
-// base64 porque o GitHub não carrega imagem externa de dentro de um SVG.
+// O retrato é assets/portrait.webp (feito pelo render-portrait.ts) e a logo é
+// assets/glousoft-logo.png. Tudo vai embutido em base64 porque o GitHub não
+// carrega imagem externa de dentro de um SVG.
 // Uso: node scripts/make-hero.ts
-import { readFileSync, writeFileSync } from "node:fs";
-import { FONT, base64, esc, root, seeded, terminal } from "./lib.ts";
+import { writeFileSync } from "node:fs";
+import { FONT, base64, esc, root, terminal } from "./lib.ts";
 
 const W = 860;
 const H = 600;
 
-// Retrato: coluna da esquerda; a largura sai da grade do portrait.txt.
+// Retrato: coluna da esquerda, mesmo tamanho do render-portrait.ts.
 const [PX, PY] = [20, 46];
 const [AREA_W, AREA_H] = [404, 540];
-const CELL_RATIO = 1.5; // altura / largura de cada caractere, igual ao make_ascii.py
-const DENSE = "0896$S3B%&"; // igual ao make_ascii.py, para o código vivo
-const FLICKER = 140;
-const K = 10; // escala interna do retrato (ver portrait())
+const [BANDS, REVEAL_SECONDS] = [38, 2.2];
 
 // Cartão
 const [CX, CY] = [444, 50]; // CY desce o cartão para ficar no meio da altura
@@ -40,68 +37,22 @@ const ROWS: [string, string][] = [
 const SWATCHES = ["#010101", "#3f1012", "#6e1518", "#a2171a", "#e5383b", "#7e7c7f", "#c9d1d9", "#f0f6fc"];
 
 function portrait(): string {
-  const lines = readFileSync(root("data/portrait.txt"), "utf8").replace(/\n+$/, "").split("\n");
-  const cols = Math.max(...lines.map((l) => l.length));
-  const rows = lines.length;
-  // Tudo do retrato é desenhado 10x maior e reduzido no fim, com coordenadas
-  // inteiras. A letra é um pouco menor que a linha: com um vão fino e igual em
-  // todas, não aparecem faixas quando o navegador encaixa as linhas no pixel.
-  const cellH = (AREA_H / rows) * K;
-  const cellW = cellH / CELL_RATIO;
-  const width = cols * cellW;
-  const x0 = (PX + AREA_W / 2) * K - width / 2;
-  const y0 = PY * K;
-  const r0 = (n: number) => n.toFixed(0);
-
-  const clips: string[] = [];
-  const texts: string[] = [];
-  lines.forEach((line, i) => {
-    const y = y0 + i * cellH;
-    const begin = 0.25 + (i * 2.2) / rows;
-    clips.push(
-      `<rect x="${r0(x0)}" y="${r0(y)}" width="0" height="${r0(cellH + 6)}">` +
-        `<animate attributeName="width" from="0" to="${r0(width)}" begin="${begin.toFixed(3)}s" ` +
-        `dur="0.45s" fill="freeze"/></rect>`,
-    );
-    if (line.trim()) {
-      // Espaço comum some no começo da linha; o não separável segura a coluna.
-      const padded = line.padEnd(cols).replaceAll(" ", " ");
-      texts.push(
-        `<text x="${r0(x0)}" y="${r0(y + cellH * 0.8)}" textLength="${r0(width)}" ` +
-          `lengthAdjust="spacing">${esc(padded)}</text>`,
-      );
-    }
-  });
-
-  // Código vivo: depois que o rosto aparece, algumas letras trocam por um instante.
-  const rng = seeded(7);
-  const spots: [number, number][] = [];
-  lines.forEach((l, r) => [...l].forEach((ch, c) => ch !== " " && spots.push([r, c])));
-  const flicker = rng.sample(spots, FLICKER).map(([r, c]) => {
-    const ch = rng.choice(DENSE);
-    const dur = rng.uniform(2.5, 6.0);
-    const on = rng.uniform(0.05, 0.8);
-    const off = on + rng.uniform(0.12, 0.3) / dur;
-    const [x, y] = [x0 + c * cellW, y0 + r * cellH];
+  // O rosto entra em faixas que correm da esquerda para a direita, de cima
+  // para baixo, como se estivesse sendo digitado. A imagem vem pronta do
+  // render-portrait.ts, então animar custa pouco para o navegador.
+  const bandH = AREA_H / BANDS;
+  const clips = Array.from({ length: BANDS }, (_, i) => {
+    const begin = 0.25 + (i * REVEAL_SECONDS) / BANDS;
     return (
-      `<g opacity="0"><rect x="${r0(x)}" y="${r0(y)}" width="${r0(cellW)}" height="${r0(cellH)}" fill="#0d1117"/>` +
-      `<text x="${r0(x)}" y="${r0(y + cellH * 0.8)}">${esc(ch)}</text>` +
-      `<animate attributeName="opacity" values="0;1;0" keyTimes="0;${on.toFixed(3)};${off.toFixed(3)}" ` +
-      `calcMode="discrete" dur="${dur.toFixed(2)}s" begin="${(2.8 + rng.uniform(0, 3)).toFixed(2)}s" ` +
-      `repeatCount="indefinite"/></g>`
+      `<rect x="${PX}" y="${(PY + i * bandH).toFixed(2)}" width="0" height="${(bandH + 0.5).toFixed(2)}">` +
+      `<animate attributeName="width" from="0" to="${AREA_W}" begin="${begin.toFixed(3)}s" ` +
+      `dur="0.45s" fill="freeze"/></rect>`
     );
   });
-
-  const areaH = AREA_H * K;
   return (
-    `<pattern id="photo" patternUnits="userSpaceOnUse" x="${r0(x0)}" y="${r0(y0)}" ` +
-    `width="${r0(width)}" height="${r0(areaH)}"><image width="${r0(width)}" height="${r0(areaH)}" ` +
-    `preserveAspectRatio="none" href="data:image/jpeg;base64,${base64("assets/portrait-fill.jpg")}"/></pattern>` +
     `<clipPath id="wipe">${clips.join("")}</clipPath>` +
-    `<g class="ascii" transform="scale(${1 / K})" font-size="${r0(cellW / 0.62)}">` +
-    `<g clip-path="url(#wipe)"><image x="${r0(x0)}" y="${r0(y0)}" width="${r0(width)}" ` +
-    `height="${r0(areaH)}" preserveAspectRatio="none" ` +
-    `href="data:image/jpeg;base64,${base64("assets/portrait-base.jpg")}"/>${texts.join("")}</g>${flicker.join("")}</g>`
+    `<image x="${PX}" y="${PY}" width="${AREA_W}" height="${AREA_H}" clip-path="url(#wipe)" ` +
+    `href="data:image/webp;base64,${base64("assets/portrait.webp")}"/>`
   );
 }
 
@@ -139,8 +90,6 @@ function card(): string {
 
 const style = `
     text { font-family: ${FONT}; }
-    .ascii text { fill: url(#photo); font-weight: 700; }
-    .ascii { text-rendering: geometricPrecision; }
     .host { font-size: 16px; font-weight: 700; }
     .key { font-size: 13px; fill: #ff6b6b; font-weight: 700; }
     .val { font-size: 13px; fill: #c9d1d9; }

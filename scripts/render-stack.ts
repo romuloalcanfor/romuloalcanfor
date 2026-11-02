@@ -14,6 +14,9 @@ const SHOW_LANGS = 8;
 // Ferramentas de build que só repetem o que já aparece (Java, Android).
 const SKIP = new Set(["Maven", "Gradle"]);
 const NAMES: Record<string, string> = { PLpgSQL: "PL/pgSQL" };
+// A barra das linguagens e o número se repetem, como no gráfico de contribuições.
+const CYCLE = 10;
+const RESET = 9.6;
 
 type Lang = { name: string; color: string; pct: number };
 const data = readJson("data/stack.json");
@@ -75,10 +78,10 @@ const style = `
     .pct { font-size: 12px; fill: #7d8590; }
     .chip { font-size: 12px; fill: #c9d1d9; }
     .count { font-size: 11px; font-weight: 700; fill: #ff6b6b; }
-    .seg { transform-box: fill-box; transform-origin: left; transform: scaleX(0);
-           animation: grow .5s ease-out forwards; }
+    .seg { transform-box: fill-box; transform-origin: left;
+           animation: grow ${CYCLE}s ease-out infinite both; }
     .late { opacity: 0; animation: fade .5s ease-out forwards; }
-    @keyframes grow { to { transform: scaleX(1); } }
+    @keyframes grow { 0% { transform: scaleX(0); } 5%, 94% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
     @keyframes fade { to { opacity: 1; } }
     `;
 
@@ -89,7 +92,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
 <style>${style}</style>
 </defs>
 ${terminal(W, H, "romulo@glousoft: ~/stack")}
-${counter(frames, numX, 74)}
+${counter(frames, numX, 74, CYCLE, RESET)}
 <text x="${(numX + 8).toFixed(0)}" y="74" class="sub">private repositories, code stays private</text>
 <text x="${LX}" y="${TOP}" class="lbl">LANGUAGES (MEASURED BY GITHUB)</text>
 <g clip-path="url(#round)">${segments.join("")}</g>

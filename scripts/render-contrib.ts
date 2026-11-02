@@ -14,6 +14,10 @@ const BAR_W = 24;
 // Blocos de números: duas colunas à direita.
 const [TILE_X, TILE_Y, TILE_W, TILE_H, TILE_GAP] = [548, 100, 140, 60, 12];
 const [START, STEP] = [0.3, 0.12]; // tempo da primeira barra e entre as barras
+// As barras sobem, ficam um tempo e descem para subir de novo: sem JavaScript o
+// SVG não sabe quando a pessoa rolou até ele, então a animação se repete.
+const CYCLE = 10;
+const RESET = 9.6; // quando o número volta a 0, junto com a descida das barras
 
 const data = readJson("data/contributions.json");
 const months: [string, number][] = Object.entries<number>(data.months).slice(-12);
@@ -32,7 +36,7 @@ months.forEach(([key, value], i) => {
   bars.push(
     `<rect class="bar${peak}" x="${x.toFixed(1)}" y="${(BASE - h).toFixed(1)}" width="${BAR_W}" ` +
       `height="${h.toFixed(1)}" rx="3" style="animation-delay:${delay.toFixed(2)}s"/>` +
-      `<text class="num late" x="${cx}" y="${(BASE - h - 6).toFixed(1)}" text-anchor="middle" ` +
+      `<text class="num" x="${cx}" y="${(BASE - h - 6).toFixed(1)}" text-anchor="middle" ` +
       `style="animation-delay:${(delay + 0.35).toFixed(2)}s">${num(value)}</text>` +
       `<text class="lbl" x="${cx}" y="${BASE + 18}" text-anchor="middle">${MONTHS[Number(key.slice(5)) - 1]}</text>`,
   );
@@ -76,10 +80,12 @@ const style = `
     .tile { font-size: 20px; font-weight: 700; fill: #f0f6fc; }
     .hot { fill: #ff6b6b; }
     .bar { fill: url(#barfill); transform-box: fill-box; transform-origin: bottom;
-            transform: scaleY(0); animation: grow .6s cubic-bezier(.2,.8,.3,1.1) forwards; }
+            animation: grow ${CYCLE}s ease-out infinite both; }
     .peak { fill: #ff6b6b; }
+    .num { animation: label ${CYCLE}s linear infinite both; }
     .late { opacity: 0; animation: fade .5s ease-out forwards; }
-    @keyframes grow { to { transform: scaleY(1); } }
+    @keyframes grow { 0% { transform: scaleY(0); } 6%, 94% { transform: scaleY(1); } 100% { transform: scaleY(0); } }
+    @keyframes label { 0%, 3% { opacity: 0; } 7%, 92% { opacity: 1; } 95%, 100% { opacity: 0; } }
     @keyframes fade { to { opacity: 1; } }
     `;
 
@@ -92,7 +98,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
 <style>${style}</style>
 </defs>
 ${terminal(W, H, "romulo@glousoft: ~/contributions")}
-${counter(frames, numX, 74)}
+${counter(frames, numX, 74, CYCLE, RESET)}
 <text x="${(numX + 8).toFixed(0)}" y="74" class="sub">contributions in the last 12 months</text>
 <path d="M${CHART_X0} ${BASE + 0.5} H${CHART_X1}" stroke="#30363d"/>
 ${bars.join("")}

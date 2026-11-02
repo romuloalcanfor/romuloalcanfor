@@ -34,39 +34,26 @@ export function terminal(w: number, h: number, title: string, titleClass = "dim"
   );
 }
 
-// Número grande que vai contando: um quadro por valor, cada um visível até o próximo.
-export function counter(frames: [number, number][], x: number, y: number): string {
+// Número grande que vai contando: um quadro por valor, cada um visível até o
+// próximo. Com cycle, a contagem recomeça a cada cycle segundos (volta a 0 em
+// resetAt), para quem rolar a página até o painel ainda ver o número subir.
+export function counter(frames: [number, number][], x: number, y: number, cycle?: number, resetAt?: number): string {
   return frames
     .map(([t, value], n) => {
-      const end = n + 1 < frames.length ? `end="${frames[n + 1][0].toFixed(3)}s"` : 'fill="freeze"';
+      const open = `<text x="${x.toFixed(0)}" y="${y}" text-anchor="end" class="big" visibility="hidden">${num(value)}`;
+      if (!cycle) {
+        const end = n + 1 < frames.length ? `end="${frames[n + 1][0].toFixed(3)}s"` : 'fill="freeze"';
+        return `${open}<set attributeName="visibility" to="visible" begin="${t.toFixed(3)}s" ${end}/></text>`;
+      }
+      const k = (s: number) => (s / cycle).toFixed(4);
+      const last = n + 1 === frames.length;
+      const [values, times] = n === 0
+        ? ["visible;hidden;visible", `0;${k(frames[1]?.[0] ?? resetAt!)};${k(resetAt!)}`]
+        : ["hidden;visible;hidden", `0;${k(t)};${k(last ? resetAt! : frames[n + 1][0])}`];
       return (
-        `<text x="${x.toFixed(0)}" y="${y}" text-anchor="end" class="big" visibility="hidden">` +
-        `${num(value)}<set attributeName="visibility" to="visible" begin="${t.toFixed(3)}s" ${end}/></text>`
+        `${open}<animate attributeName="visibility" calcMode="discrete" values="${values}" ` +
+        `keyTimes="${times}" dur="${cycle}s" repeatCount="indefinite"/></text>`
       );
     })
     .join("");
-}
-
-// Sorteio com semente fixa, para o SVG sair igual toda vez que for gerado.
-export function seeded(seed: number) {
-  let a = seed >>> 0;
-  const next = () => {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-  return {
-    uniform: (lo: number, hi: number) => lo + (hi - lo) * next(),
-    choice: <T>(items: ArrayLike<T>) => items[Math.floor(next() * items.length)],
-    sample<T>(items: T[], k: number): T[] {
-      const pool = [...items];
-      for (let i = 0; i < k; i++) {
-        const j = i + Math.floor(next() * (pool.length - i));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-      }
-      return pool.slice(0, k);
-    },
-  };
 }
