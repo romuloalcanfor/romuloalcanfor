@@ -1,0 +1,175 @@
+{
+ "updated": "2026-11-02",
+ "repos": 18,
+ "private": 18,
+ "languages": [
+  {
+   "name": "TypeScript",
+   "color": "#3178c6",
+   "bytes": 15791839,
+   "pct": 56.292362956980426
+  },
+  {
+   "name": "PLpgSQL",
+   "color": "#336790",
+   "bytes": 5384697,
+   "pct": 19.194554727752962
+  },
+  {
+   "name": "HTML",
+   "color": "#e34c26",
+   "bytes": 3335570,
+   "pct": 11.890136234824531
+  },
+  {
+   "name": "JavaScript",
+   "color": "#f1e05a",
+   "bytes": 2493111,
+   "pct": 8.887065610537217
+  },
+  {
+   "name": "CSS",
+   "color": "#663399",
+   "bytes": 508541,
+   "pct": 1.8127701625191204
+  },
+  {
+   "name": "Java",
+   "color": "#b07219",
+   "bytes": 478082,
+   "pct": 1.7041945189030305
+  },
+  {
+   "name": "Shell",
+   "color": "#89e051",
+   "bytes": 39926,
+   "pct": 0.14232217561364452
+  },
+  {
+   "name": "Swift",
+   "color": "#F05138",
+   "bytes": 19403,
+   "pct": 0.06916488437187658
+  },
+  {
+   "name": "Dockerfile",
+   "color": "#384d54",
+   "bytes": 2084,
+   "pct": 0.007428728497190682
+  }
+ ],
+ "tools": [
+  {
+   "name": "Node.js",
+   "repos": 17
+  },
+  {
+   "name": "React",
+   "repos": 17
+  },
+  {
+   "name": "Supabase",
+   "repos": 12
+  },
+  {
+   "name": "Tailwind CSS",
+   "repos": 12
+  },
+  {
+   "name": "Vite",
+   "repos": 10
+  },
+  {
+   "name": "GitHub Actions",
+   "repos": 8
+  },
+  {
+   "name": "React Router",
+   "repos": 8
+  },
+  {
+   "name": "Deno",
+   "repos": 7
+  },
+  {
+   "name": "Next.js",
+   "repos": 7
+  },
+  {
+   "name": "Zod",
+   "repos": 7
+  },
+  {
+   "name": "Cloudflare Workers",
+   "repos": 6
+  },
+  {
+   "name": "TanStack Query",
+   "repos": 6
+  },
+  {
+   "name": "Vitest",
+   "repos": 6
+  },
+  {
+   "name": "Claude API",
+   "repos": 4
+  },
+  {
+   "name": "Playwright",
+   "repos": 4
+  },
+  {
+   "name": "Capacitor",
+   "repos": 3
+  },
+  {
+   "name": "Gradle",
+   "repos": 3
+  },
+  {
+   "name": "Recharts",
+   "repos": 3
+  },
+  {
+   "name": "Framer Motion",
+   "repos": 2
+  },
+  {
+   "name": "Prisma",
+   "repos": 2
+  },
+  {
+   "name": "Docker",
+   "repos": 1
+  },
+  {
+   "name": "Express",
+   "repos": 1
+  },
+  {
+   "name": "Hono",
+   "repos": 1
+  },
+  {
+   "name": "Maven",
+   "repos": 1
+  },
+  {
+   "name": "Spring Boot",
+   "repos": 1
+  },
+  {
+   "name": "Stripe",
+   "repos": 1
+  },
+  {
+   "name": "Three.js",
+   "repos": 1
+  },
+  {
+   "name": "Vercel",
+   "repos": 1
+  }
+ ]
+}

@@ -8,7 +8,7 @@ Saídas:
   data/portrait.txt         os caracteres, linha por linha
   assets/portrait-fill.jpg  a cor de cada ponto (branco em cima, vermelho
                             embaixo, apagado onde a foto é escura); o
-                            make_hero_svg.py usa como preenchimento das letras
+                            make-hero.ts usa como preenchimento das letras
   assets/portrait-base.jpg  a mesma foto mais apagada e só na cabeça, que fica
                             atrás das letras
 

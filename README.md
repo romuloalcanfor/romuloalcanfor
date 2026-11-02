@@ -3,6 +3,10 @@
 </p>
 
 <p align="center">
+  <img src="./stack.svg" width="860" alt="Languages measured by GitHub and frameworks used across 18 private repositories" />
+</p>
+
+<p align="center">
   <img src="./contrib.svg" width="860" alt="Contributions per month over the last 12 months, with streaks and best day" />
 </p>
 
