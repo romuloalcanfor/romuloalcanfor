@@ -1,9 +1,9 @@
 {
  "user": "romuloalcanfor",
- "updated": "2026-11-20",
- "total": 5597,
+ "updated": "2026-11-21",
+ "total": 5620,
  "longest_streak": 64,
- "current_streak": 2,
+ "current_streak": 3,
  "best_day": {
   "date": "2026-05-04",
   "count": 202
@@ -21,7 +21,7 @@
   "2026-08": 461,
   "2026-09": 617,
   "2026-10": 570,
-  "2026-11": 260
+  "2026-11": 283
  },
  "days": [
   {
@@ -1821,13 +1821,13 @@
   },
   {
    "date": "2026-11-10",
-   "level": 0,
-   "count": 0
+   "level": 1,
+   "count": 1
   },
   {
    "date": "2026-11-11",
    "level": 1,
-   "count": 2
+   "count": 3
   },
   {
    "date": "2026-11-12",
@@ -1871,6 +1871,11 @@
   },
   {
    "date": "2026-11-20",
+   "level": 1,
+   "count": 21
+  },
+  {
+   "date": "2026-11-21",
    "level": 0,
    "count": 0
   }
